@@ -167,6 +167,12 @@ local function update_extmark(opts, position, bufnr)
   local sign_enabled = opts.sign.enabled
   local virt_text_enabled = opts.virtual_text.enabled
 
+  -- Intended to fix an invalid reference when the buffer number is invalid
+  -- for some unknown reason. I just know that I occasionally get errors
+  -- for that reason, so this is a guard against it.
+  if (vim.b[bufnr] == nil) then
+      return
+  end
   local extmark_id = vim.b[bufnr].lightbulb_extmark
   if not (sign_enabled or virt_text_enabled) or position == nil then
     if extmark_id ~= nil then

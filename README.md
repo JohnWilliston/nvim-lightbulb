@@ -1,3 +1,10 @@
+
+# Overview
+
+The purpose of this fork is to provide a workaround for an issue I observed while using the original plugin. I don't know why, but as I added to an issue posted in its repo (see [Random exception updating extmark](https://github.com/hrsh7th/cmp-nvim-lsp-document-symbol/issues/14) for details) a random error is generated from time to time, always providing the same stack dump about an invalid buffer number. I'm not exactly a Neovim or Lua expert (quite new at both, in fact), but I took it as an opportunity to whip up a little workaround in my own repo. Feel free to use this repo if you're seeing the same issue and/or add your feedback to that issue posted in the original repo. I don't know whether the problem is real or not (or just something I've screwed up) or whether the author accepts contributions at this point.
+
+The original readme follows below for reference. Please see [the original repository](https://github.com/kosayoda/nvim-lightbulb) for more details.
+
 # nvim-lightbulb
 
 VSCode 💡 for neovim's built-in LSP.
