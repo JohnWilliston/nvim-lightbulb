@@ -156,6 +156,9 @@ local function update_status_text(opts, position, bufnr)
   end
 end
 
+-- The following is a variable designed to prevent re-entrancy in the 
+-- update_extmark function below.
+local in_update_extmark = false
 --- Update the lightbulb extmark.
 ---
 ---@param opts table Partial or full configuration table. See |nvim-lightbulb-config|.
@@ -164,6 +167,13 @@ end
 ---
 ---@private
 local function update_extmark(opts, position, bufnr)
+  -- Guard against re-entrancy.
+  if (in_update_extmark) then
+      return
+  end
+  -- Set guard against re-entrancy.
+  in_update_extmark = true
+
   local sign_enabled = opts.sign.enabled
   local virt_text_enabled = opts.virtual_text.enabled
 
@@ -171,6 +181,7 @@ local function update_extmark(opts, position, bufnr)
   -- for some unknown reason. I just know that I occasionally get errors
   -- for that reason, so this is a guard against it.
   if (vim.b[bufnr] == nil) then
+      in_update_extmark = false
       return
   end
   local extmark_id = vim.b[bufnr].lightbulb_extmark
@@ -178,6 +189,7 @@ local function update_extmark(opts, position, bufnr)
     if extmark_id ~= nil then
       vim.api.nvim_buf_del_extmark(bufnr, LIGHTBULB_NS, extmark_id)
     end
+    in_update_extmark = false
     return
   end
 
@@ -209,6 +221,8 @@ local function update_extmark(opts, position, bufnr)
   }
   vim.b[bufnr].lightbulb_extmark =
       vim.api.nvim_buf_set_extmark(bufnr, LIGHTBULB_NS, position.line, position.col + 1, extmark_opts)
+
+  in_update_extmark = false
 end
 
 --- Handler factory to keep track of current lightbulb line.
